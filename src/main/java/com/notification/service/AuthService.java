@@ -61,5 +61,9 @@ public class AuthService implements UserDetailsService {
 		return userRepo.findAll();
 	}
 
+	public UserEntity findByEmail(String email) {
+		return userRepo.findByEmail(email).orElseThrow(()-> new CustomException("The request is rejected because the credentials are invalid"));
+	}
+
 
 }

@@ -1,6 +1,7 @@
 package com.notification.error;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,9 @@ public class CustomResponse {
 		this.message = "Successfully Done";
 		this.details = details;
 		this.status_code = HttpStatus.OK.value();
-		SimpleDateFormat sdf = new SimpleDateFormat(DateFormat.DATE_TIME);
-		sdf.format(new Date());
-		this.time = sdf.format(DateFormat.DATE_TIME);
+        Date date = Calendar.getInstance().getTime();  
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        this.time = dateFormat.format(date);  
 	}
 
 	public CustomResponse(Object details, int status_code) {
