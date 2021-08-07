@@ -16,10 +16,7 @@ public class NotificationController {
 	UserRepo r ;
 	@GetMapping("id")
 	public Object ViewAdditional() {
-		UserEntity u = new UserEntity();
-		u.setEmail("asdasd");
-		u.setFirst_name("laksd");
-		r.save(u);
-		return u;
+
+		return null;
 	}
 }
