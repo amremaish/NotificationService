@@ -42,7 +42,7 @@ public class CustomerService {
 		return response;
 	}
 	@Transactional
-	public Customer update(Customer cutomerParams) {
+	public Customer updateCustomer(Customer cutomerParams) {
 		Customer CostomerDB = customerRepo.findById(cutomerParams.getId()).orElseThrow(() -> new CustomException("Customer is not found"));
 		CostomerDB.setEmail(cutomerParams.getEmail());
 		CostomerDB.setUsername(cutomerParams.getUsername());

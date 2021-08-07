@@ -25,7 +25,7 @@ public class CustomerController {
 
 	@PostMapping("/update")
 	public Object updateCustomer(@RequestBody Customer cutomerParams) {
-		return new CustomResponse(customerService.createCustomer(cutomerParams));
+		return new CustomResponse(customerService.updateCustomer(cutomerParams));
 	}
 
 	@GetMapping("/all")
