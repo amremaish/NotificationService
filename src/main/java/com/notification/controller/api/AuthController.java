@@ -26,8 +26,11 @@ import com.notification.security.JWTResponse;
 import com.notification.security.TokenUtiles;
 import com.notification.service.AuthService;
 
+import io.swagger.annotations.Api;
+
 @RestController
 @RequestMapping(value = "/api/")
+
 public class AuthController {
 
 	Logger log = LoggerFactory.getLogger(AuthController.class);
