@@ -15,4 +15,7 @@ public interface DeviceRepo extends PagingAndSortingRepository<Device, Long> {
 	
 	@Query(value = "SELECT * from device_entity where customer_id = :customer_id", nativeQuery = true)
 	List<Device> getCustomerDevices(@Param("customer_id") long customer_id, Pageable pageable);
+	
+	@Query(value = "SELECT * from device_entity where customer_id = :customer_id", nativeQuery = true)
+	List<Device> getCustomerDevices(@Param("customer_id") long customer_id);
 }

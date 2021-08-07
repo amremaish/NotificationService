@@ -37,6 +37,10 @@ public class Customer {
 	@Column(name = "username")
 	private String username;
 
+	@NotNull(message = "language must not be empty")
+	@Column(name = "language")
+	private String language;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateFormat.DATE_TIME)
 	@Column(name = "created_at")
 	private Date created_at;
@@ -51,6 +55,14 @@ public class Customer {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public String getEmail() {

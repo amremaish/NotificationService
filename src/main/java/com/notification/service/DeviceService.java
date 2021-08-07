@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.notification.dao.entites.Customer;
 import com.notification.dao.entites.Device;
 import com.notification.dao.repo.DeviceRepo;
+import com.notification.error.CustomException;
 
 @Service
 public class DeviceService {
@@ -29,8 +30,16 @@ public class DeviceService {
 		response.put("totalPages", (int) Math.ceil(deviceRepo.count() / Double.valueOf(pageSize)));
 		return response;
 	}
-
+	
+	public List<Device> findAll(long customer_id) {
+		return deviceRepo.getCustomerDevices(customer_id);
+	}
+	
 	public Device createDevice(Device deviceParams, long customer_id) {
+		if (!deviceParams.getDeviceType().equals(Device.ANDROID_TYPE)
+				&& !deviceParams.getDeviceType().equals(Device.iOS_TYPE)) {
+			throw new CustomException("invalid device type");
+		}
 		Customer customer = customerService.findbyId(customer_id);
 		deviceParams.setCustomer(customer);
 		return deviceRepo.save(deviceParams);

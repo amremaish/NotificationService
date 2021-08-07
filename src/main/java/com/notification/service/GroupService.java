@@ -23,14 +23,14 @@ import com.notification.error.CustomException;
 @Service
 public class GroupService {
 	@Autowired
-	private GroupRepo  groupRepo;
+	private GroupRepo groupRepo;
 	@Autowired
-	private CustomerService  customerService;	
+	private CustomerService customerService;
 	@Autowired
-	private GroupCustomerRepo  groupCustomerRepo;
+	private GroupCustomerRepo groupCustomerRepo;
 	@Autowired
 	private CustomerRepo customerRepo;
-	
+
 	public Group findbyId(long id) {
 		return groupRepo.findById(id).orElseThrow(() -> new CustomException("group is not found"));
 	}
@@ -48,33 +48,35 @@ public class GroupService {
 		Map<String, Object> response = new HashMap<>();
 		response.put("groups", groups);
 		response.put("pageNumber", pageNo);
-		response.put("totalPages",  (int)Math.ceil(groupRepo.count() / Double.valueOf(pageSize)));
+		response.put("totalPages", (int) Math.ceil(groupRepo.count() / Double.valueOf(pageSize)));
 		return response;
 	}
+
 	@Transactional
 	public Group updateGroup(Group groupParams) {
-		Group groupDB = groupRepo.findById(groupParams.getId()).orElseThrow(() -> new CustomException("group is not found"));
+		Group groupDB = groupRepo.findById(groupParams.getId())
+				.orElseThrow(() -> new CustomException("group is not found"));
 		groupDB.setName(groupParams.getName());
 		return groupRepo.save(groupDB);
 	}
-	
+
 	public Group createGroup(Group groupParams) {
 		Group group = groupRepo.findByName(groupParams.getName()).orElse(null);
 		if (group != null) {
-			throw  new CustomException("group is already existing");
+			throw new CustomException("group is already existing");
 		}
 		return groupRepo.save(groupParams);
 	}
 
 	public Object addCustomerToGroup(Customer customerParams, long group_id) {
 		Group group = groupRepo.findById(group_id).orElseThrow(() -> new CustomException("group is not found"));
-		Customer customer = null ;
+		Customer customer = null;
 		if (customerParams.getId() == 0) {
 			customer = customerService.createCustomer(customerParams);
 		} else {
 			customer = customerService.findbyId(customerParams.getId());
 		}
-		GroupCustomer groupCustomer = new GroupCustomer();  
+		GroupCustomer groupCustomer = new GroupCustomer();
 		groupCustomer.setGroup(group);
 		groupCustomer.setCustomer(customer);
 		groupCustomerRepo.save(groupCustomer);
@@ -87,8 +89,11 @@ public class GroupService {
 		Map<String, Object> response = new HashMap<>();
 		response.put("customers", pagedResult);
 		response.put("pageNumber", pageNo);
-		response.put("totalPages", (int)Math.ceil(groupRepo.count() / Double.valueOf(pageSize)));
+		response.put("totalPages", (int) Math.ceil(groupRepo.count() / Double.valueOf(pageSize)));
 		return response;
 	}
 
+	public List<Customer> getCustomersGroup(long group_id) {
+		return customerRepo.getCustomersGroup(group_id);
+	}
 }
