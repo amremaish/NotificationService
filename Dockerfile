@@ -1,7 +1,9 @@
+FROM alpine:3.14
 FROM openjdk:8-jdk-alpine
+COPY ./init-user-db.sh /init-user-db.sh
+RUN /bin/sh init-user-db.sh
 VOLUME /tmp
-EXPOSE 8082
-RUN mkdir -p /app/
-RUN mkdir -p /app/logs/
-ADD target/notification-0.0.1-SNAPSHOT.jar /app/app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=container", "-jar", "/app/app.jar"]
+RUN mkdir /code
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /app.jar"]
