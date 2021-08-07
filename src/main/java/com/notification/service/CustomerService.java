@@ -38,7 +38,7 @@ public class CustomerService {
 		Map<String, Object> response = new HashMap<>();
 		response.put("customers", cutomers);
 		response.put("pageNumber", pageNo);
-		response.put("totalPages", Math.ceil(customerRepo.count() / Double.valueOf(pageSize)));
+		response.put("totalPages",(int) Math.ceil(customerRepo.count() / Double.valueOf(pageSize)));
 		return response;
 	}
 	@Transactional
