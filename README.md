@@ -4,7 +4,7 @@ Notification service based on Spring boot
 Features
 --------
 * Use dynamic templates to send notifications / SMS
-* Dynamic languages (you can use whatever language)
+* Dynamic languages ( you can use with any language )
 * Send notification / SMS to group of people
 * Ready to work with SMS or push notification provider
 
