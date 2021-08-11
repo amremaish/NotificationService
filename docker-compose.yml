@@ -1,28 +1,22 @@
 version: "3"
 services:
   postgres:
-    image: postgres:13
+    image: postgres:11.3-alpine
     network_mode: bridge
     container_name: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./init-user-db.sh:/init-user-db.sh
     expose:
     - 5432
     ports:
       - 5432:5432
+    command: /bin/sh -c "init-user-db.sh"
     environment:
          - POSTGRES_PASSWORD=root
          - POSTGRES_USER=db_user
          - POSTGRES_DB=notification
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
-  rabbitmq:
-  image: rabbitmq:management
-  ports:
-    - "5672:5672" #JMS Port
-    - "15672:15672" #Management Port - default user:pass = guest:guest
 # APP*****************************************
   springbootapp:
     image: springbootapp:latest
@@ -40,6 +34,16 @@ services:
       - postgres
     links:
       - postgres
+      
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672" #JMS Port
+      - "15672:15672" #Management Port - default user:pass = guest:guest
+    depends_on:
+        - postgres
+        - springbootapp 
 volumes:
   postgres-data:
+  
   

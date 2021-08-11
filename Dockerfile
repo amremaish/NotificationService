@@ -1,7 +1,5 @@
-FROM alpine:3.14
+FROM postgres:11.3-alpine
 FROM openjdk:8-jdk-alpine
-COPY ./init-user-db.sh /init-user-db.sh
-RUN /bin/sh init-user-db.sh
 VOLUME /tmp
 RUN mkdir /code
 ARG JAR_FILE=target/*.jar
