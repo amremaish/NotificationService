@@ -1,10 +1,8 @@
 package com.notification.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.notification.dao.entites.Customer;
+import com.notification.dao.repo.CustomerRepo;
+import com.notification.error.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,9 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.notification.dao.entites.Customer;
-import com.notification.dao.repo.CustomerRepo;
-import com.notification.error.CustomException;
+import java.util.*;
 
 @Service
 public class CustomerService {
@@ -51,12 +47,14 @@ public class CustomerService {
 	}
 	
 	public Customer createCustomer(Customer cutomerParams) {
-		Customer Customer = customerRepo.findByEmail(cutomerParams.getEmail()).orElse(null);
+		Customer Customer = this.findByEmail(cutomerParams.getEmail()).orElse(null);
 		if (Customer != null) {
 			throw  new CustomException("Customer is already existing");
 		}
 		return customerRepo.save(cutomerParams);
 	}
-	
+	public Optional<Customer> findByEmail(String email){
+		return customerRepo.findByEmail(email);
+	}
 
 }

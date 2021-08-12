@@ -1,36 +1,45 @@
 package com.notification.NotificationService;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.notification.dao.entites.Customer;
+import com.notification.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
 
-import com.notification.dao.entites.Customer;
-import com.notification.service.CustomerService;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class CustomerControllerTests {
-	@Autowired
-	private CustomerService customerService;
+    @Autowired
+    private CustomerService customerService;
 
-	@Test
-	Customer testCreateCustomer() {
-		Customer customer = new Customer();
-		customer.setEmail("test@test.com");
-		customer.setLanguage("en");
-		customer.setPhone_number("123456");
-		customer.setUsername("test");
-		Customer savedCustomer = customerService.createCustomer(customer);
-		assertThat(customer.getEmail()).isEqualTo(savedCustomer.getEmail());
-		return savedCustomer;
-	}
-	@Test
-	void testFindCustomer() {
-		Customer customer = this.testCreateCustomer();
-		Customer foundCustomer =  customerService.findbyId(customer.getId());
-		assertThat(foundCustomer.getId()).isEqualTo(foundCustomer.getId());
-	}
+    @Test
+    Customer testCreateCustomer() {
+        Customer customer = new Customer();
+
+        customer.setEmail("test@test.com");
+        customer.setLanguage("en");
+        customer.setPhone_number("123456");
+        customer.setUsername("test");
+        Customer ex = customerService.findByEmail(customer.getEmail()).orElse(null);
+        Customer savedCustomer = null;
+        if (ex == null) {
+            savedCustomer = customerService.createCustomer(customer);
+        } else {
+            return null;
+        }
+        assertThat(customer.getEmail()).isEqualTo(savedCustomer.getEmail());
+        return savedCustomer;
+    }
+
+    @Test
+    void testFindCustomer() {
+        Customer customer = this.testCreateCustomer();
+        if (customer == null) {
+            return;
+        }
+        Customer foundCustomer = customerService.findbyId(customer.getId());
+        assertThat(foundCustomer.getId()).isEqualTo(foundCustomer.getId());
+    }
 
 }
