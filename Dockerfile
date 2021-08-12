@@ -1,19 +1,23 @@
 # syntax=docker/dockerfile:experimental
-FROM openjdk:8-jdk-alpine as build
-WORKDIR /workspace/app
+FROM maven:3.5.2-jdk-8-alpine AS MAVEN_BUILD
 
-COPY mvnw .
-COPY .mvn .mvn
+MAINTAINER Brian Hannaway
+
 COPY pom.xml .
 COPY src src
 
-RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+#RUN mvn package
+#RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn package
+FROM openjdk:8-jre-alpine
 
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ARG DEPENDENCY=/workspace/app/target/dependency
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","NotificationService.Application"]
+WORKDIR /app
+
+COPY --from=MAVEN_BUILD /target/docker-boot-intro-0.1.0.jar /app/
+
+ENTRYPOINT ["java", "-jar", "docker-boot-intro-0.1.0.jar"]
+
+
+
+
+

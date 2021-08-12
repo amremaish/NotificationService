@@ -22,9 +22,6 @@ services:
     image: springbootapp:latest
     network_mode: bridge
     container_name: springbootapp
-    build:
-      context: .
-      dockerfile: Dockerfile
     expose:
       - 8080
     ports:
